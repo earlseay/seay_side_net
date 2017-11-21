@@ -1,14 +1,22 @@
-﻿@model List<LoanCalc.Models.Loan>
+﻿@model LoanCalc.Models.LoanSet
 @{
 	ViewBag.Title = "Snowball";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@using (Html.BeginForm("Submit", "Loans", FormMethod.Post))
+{
 <div class="container">
+	<div class="row" style="margin-top:10px;">
+		<div class="col col-lg-6">
+			Run Date: @Html.TextBoxFor(model => model.RunDate) <button type="submit" class="btn btn-primary">Calculate</button>
+		</div>
+	</div>
+
 	@{
 		var itemsPerRow = 2;
 		var count = 0;
-		foreach (var loan in @Model)
+		foreach (var loan in Model.Loans)
 		{
 			if (count == 0 || count % itemsPerRow == 0)
 			{
@@ -17,7 +25,7 @@
 			<div class="col-lg-6 col-md-1">
 				@Html.Partial("Loan", loan)
 			</div>
-			if (count == (itemsPerRow - 1) || (count- (itemsPerRow-1)) % itemsPerRow == 0)
+			if (count == (itemsPerRow - 1) || (count - (itemsPerRow - 1)) % itemsPerRow == 0)
 			{
 				@:</div>
 			}
@@ -25,4 +33,4 @@
 		}
 	}
 </div>
-
+}

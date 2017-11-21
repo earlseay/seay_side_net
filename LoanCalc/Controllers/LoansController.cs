@@ -12,9 +12,12 @@ namespace LoanCalc.Controllers
 		// GET: Loan/Snowball
 		public ActionResult Snowball()
 		{
-			DateTime RunDate = new DateTime(2017, 11, 30);
+			var ls = new LoanSet()
+			{
+				RunDate = DateTime.Now,
+			};
 
-			List<Loan> loans = new List<Loan>
+			ls.Loans = new List<Loan>
 			{
 				new Loan("EJ Nelnet", 565.12m, 66.64m, 6.050m, 85m, new DateTime(2017,11,18)),
 				new Loan("EJ Navient", 735.39m, 54.40m, 6.800m, 0m, new DateTime(2017,10,23)),
@@ -29,7 +32,7 @@ namespace LoanCalc.Controllers
 
 			Loan previousLoan = null;
 			//for each loan
-			foreach (var loan in loans.OrderBy(al => al.Original_AmountRemaining))
+			foreach (var loan in ls.Loans.OrderBy(al => al.Original_AmountRemaining))
 			{
 				if (previousLoan != null)
 					loan.ExtraPaymentAmount = previousLoan.MonthlyPayment + previousLoan.ExtraPaymentAmount;
@@ -43,13 +46,13 @@ namespace LoanCalc.Controllers
 					var currentAmountRemaining = computedAmountRemaining;
 					var monthNumber = ((loan.MonthlyPaymentDate.Month + loan.MonthsToPayOff) % 12);
 					var interestDays = DateTime.DaysInMonth(
-										(loan.MonthlyPaymentDate.Year + (RunDate.Year - loan.MonthlyPaymentDate.Year)),
+										(loan.MonthlyPaymentDate.Year + (ls.RunDate.Year - loan.MonthlyPaymentDate.Year)),
 										monthNumber > 0 ? monthNumber : 12);
 					for (int j = 0; j < interestDays; j++)
 					{
 						date = date.AddDays(1);
 						computedAmountRemaining += computedAmountRemaining * (((loan.InterestRate / 12) / interestDays) / 100);
-						if (date.Date <= RunDate.Date)
+						if (date.Date <= ls.RunDate.Date)
 							loan.Current_AmountRemaining = computedAmountRemaining;
 					}
 					var payment = new Payment()
@@ -73,12 +76,15 @@ namespace LoanCalc.Controllers
 						payment.Amount = computedAmountRemaining;
 					}
 					computedAmountRemaining -= payment.Amount;
-					loan.Payments.Add(payment);
 
-					if (date.Date <= RunDate.Date)
+					if (date.Date <= ls.RunDate.Date)
 					{
 						loan.Current_AmountRemaining = computedAmountRemaining;
 						loan.MonthsPaid++;
+					}
+					else
+					{
+						loan.Payments.Add(payment);
 					}
 					loan.MonthsToPayOff++;
 				}
@@ -86,7 +92,14 @@ namespace LoanCalc.Controllers
 				previousLoan = loan;
 			}
 
-			return View(loans);
+			ls.Loans.RemoveAll(l => l.Current_AmountRemaining <= 0);
+			return View(ls);
+		}
+
+		[HttpPost]
+		public ActionResult Submit(LoanSet model)
+		{
+			return View("Snowball", model);
 		}
 	}
 }

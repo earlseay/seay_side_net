@@ -50,7 +50,7 @@
 			</div>
 			<div class="row">
 				<div class="col col-md-12">
-					Months to Payoff: @Model.MonthsToPayOff
+					Total Months to Payoff: @Model.MonthsToPayOff
 				</div>
 			@{
 			var yearsToPayoff = Model.MonthsToPayOff > 0 ? Model.MonthsToPayOff / 12 > 1 ? Model.MonthsToPayOff / 12 : 0 : 0;
@@ -65,6 +65,9 @@
 				<div class="col-md-12">
 					Payments made to date: @Model.MonthsPaid
 				</div>
+				<div class="col-md-12">
+					Payments left to make: @(Model.MonthsToPayOff - Model.MonthsPaid)
+				</div>
 			</div>
 			<div class="row">
 				<div class="col col-md-12">
@@ -72,7 +75,7 @@
 						<thead>
 							<tr>
 								<td>Date</td>
-								<td>Computed Loan Amount with Interest</td>
+								<td>Loan Amount</td>
 								<td>Payment Amount</td>
 								<td>Principal</td>
 								<td>Interest</td>
