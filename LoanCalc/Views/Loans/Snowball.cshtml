@@ -16,7 +16,7 @@
 	@{
 		var itemsPerRow = 2;
 		var count = 0;
-		foreach (var loan in Model.Loans)
+		foreach (var loan in Model.Loans.OrderBy(al => al.Current_AmountRemaining).ToList())
 		{
 			if (count == 0 || count % itemsPerRow == 0)
 			{

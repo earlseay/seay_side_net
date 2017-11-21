@@ -39,13 +39,13 @@ namespace LoanCalc.Controllers
 				new Loan("VACU CC", 2960.54m, 102m, 10.990m, 0m, new DateTime(2017,11,18)),
 				new Loan("JRAC HVAC", 6580m, 125m, 0m, 0m, new DateTime(2017,11,08)),
 				new Loan("Durango", 24702.61m, 543.95m, 3.700m, 0m, new DateTime(2017,10,31)),
-				new Loan("Discover Debt Consolidation", 29785.17m, 583.42m, 13.990m, 0m, new DateTime(2017,10,20)),
+				new Loan("Discover DC", 29555.66m, 583.42m, 13.990m, 0m, new DateTime(2017,11,20)),
 				new Loan("Mortgage", 183880.32m, 876.26m, 3.750m, 0m, new DateTime(2017,11,01)),
 			};
 
 			Loan previousLoan = null;
 			//for each loan
-			foreach (var loan in ls.Loans.OrderBy(al => al.Original_AmountRemaining))
+			foreach (var loan in ls.Loans.OrderBy(al => al.Original_AmountRemaining).ToList())
 			{
 				if (previousLoan != null)
 					loan.ExtraPaymentAmount = previousLoan.MonthlyPayment + previousLoan.ExtraPaymentAmount;
