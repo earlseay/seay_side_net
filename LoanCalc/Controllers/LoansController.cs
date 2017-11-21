@@ -12,9 +12,22 @@ namespace LoanCalc.Controllers
 		// GET: Loan/Snowball
 		public ActionResult Snowball()
 		{
+			var ls = SnowballAlg(DateTime.Now);
+			return View(ls);
+		}
+
+		[HttpPost]
+		public ActionResult Submit(LoanSet model)
+		{
+			var ls = SnowballAlg(model.RunDate);
+			return View("Snowball", ls);
+		}
+
+		private LoanSet SnowballAlg(DateTime runDate)
+		{
 			var ls = new LoanSet()
 			{
-				RunDate = DateTime.Now,
+				RunDate = runDate,
 			};
 
 			ls.Loans = new List<Loan>
@@ -91,15 +104,8 @@ namespace LoanCalc.Controllers
 				loan.New_ProjectedPayoffDate = date;
 				previousLoan = loan;
 			}
-
 			ls.Loans.RemoveAll(l => l.Current_AmountRemaining <= 0);
-			return View(ls);
-		}
-
-		[HttpPost]
-		public ActionResult Submit(LoanSet model)
-		{
-			return View("Snowball", model);
+			return ls;
 		}
 	}
 }
