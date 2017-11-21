@@ -1,0 +1,9 @@
+﻿@model LoanCalc.Models.Payment
+
+<tr>
+	<td>@Model.Date.ToString("MM/dd/yyyy")</td>
+	<td>@string.Format("{0:c}", Model.LoanAmount)</td>
+	<td>@string.Format("{0:c}", Model.Amount)</td>
+	<td>@string.Format("{0:c}", Model.Amount - Model.Interest)</td>
+	<td>@string.Format("{0:c}", Model.Interest)</td>
+</tr>

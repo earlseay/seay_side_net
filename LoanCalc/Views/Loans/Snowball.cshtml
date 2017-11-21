@@ -1,0 +1,28 @@
+﻿@model List<LoanCalc.Models.Loan>
+@{
+	ViewBag.Title = "Snowball";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+	@{
+		var itemsPerRow = 2;
+		var count = 0;
+		foreach (var loan in @Model)
+		{
+			if (count == 0 || count % itemsPerRow == 0)
+			{
+				@:<div class="row">
+			}
+			<div class="col-lg-6 col-md-1">
+				@Html.Partial("Loan", loan)
+			</div>
+			if (count == (itemsPerRow - 1) || (count- (itemsPerRow-1)) % itemsPerRow == 0)
+			{
+				@:</div>
+			}
+			count++;
+		}
+	}
+</div>
+
