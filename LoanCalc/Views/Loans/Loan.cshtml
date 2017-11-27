@@ -29,25 +29,30 @@
 	<div class="row panel-heading">
 		<div class="row">
 			<div class="col col-sm-12">
+
 				<a class="panel-title" data-toggle="collapse" href="#loanBody_@Model.Id" aria-expanded="false" aria-controls="loanBody_@Model.Id">
-					<h3 class="panel-title"><span class="glyphicon glyph"></span><span class="bold">@string.Format("{0:c}", Model.Current_AmountRemaining)</span> - @Model.Name</h3>
-				</a>
-		</div>
-		</div>
-		<div class="row">
-			<div class="col col-md-12">
-				<div class="progress progress-striped progress-bar-warning">
-					@{
-						var percentComplete = Math.Round((double)Model.MonthsPaid / (double)Model.MonthsToPayOff, 2, MidpointRounding.AwayFromZero) * 100;
-						if (Model.Current_AmountRemaining == 0)
-						{
-							percentComplete = 100;
-						}
-					}
-					<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@percentComplete" aria-valuemin="0" aria-valuemax="100" style="width: @(percentComplete)%;">
-						@(percentComplete)%
+					<div class="row panel-title">
+
+						<div class="col col-md-9">
+							<h3 class="panel-title"><span class="glyphicon glyph"></span><span class="bold">@string.Format("{0:c}", Model.Current_AmountRemaining)</span> - @Model.Name</h3>
+						</div>
+						<div class="col col-md-3">
+							<span class="bold">@Model.New_ProjectedPayoffDate.ToShortDateString()</span>
+						</div>
 					</div>
-				</div>
+				</a>
+			</div>
+		</div>
+		<div class="progress progress-striped progress-bar-warning">
+			@{
+				var percentComplete = Math.Round((double)Model.MonthsPaid / (double)Model.MonthsToPayOff, 2, MidpointRounding.AwayFromZero) * 100;
+				if (Model.Current_AmountRemaining == 0)
+				{
+					percentComplete = 100;
+				}
+			}
+			<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@percentComplete" aria-valuemin="0" aria-valuemax="100" style="width: @(percentComplete)%;">
+				@(percentComplete)%
 			</div>
 		</div>
 	</div>
@@ -112,7 +117,7 @@
 			{
 				<div class="row">
 					<div class="col col-md-12" style="overflow-x:scroll;">
-					
+
 						<table class="table table-condensed table-bordered table-striped">
 							<thead>
 								<tr>
@@ -130,7 +135,7 @@
 								}
 							</tbody>
 						</table>
-					
+
 					</div>
 				</div>
 			}
