@@ -1,40 +1,67 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - SeaySide Labs</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="google-signin-client_id" content="998578782462-fhq61573crvcebaa0t9ts2e908aa0c5r.apps.googleusercontent.com">
+	<title>@ViewBag.Title - SeaySide Labs</title>
+	@Styles.Render("~/Content/css")
+	@Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Loan Calc", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-										<li>@Html.ActionLink("Snowball", "Snowball", "Loans")</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - SeaySide Labs</p>
-        </footer>
-    </div>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				@Html.ActionLink("Loan Calc", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li>@Html.ActionLink("Snowball", "Snowball", "Loans")</li>
+					<li><div class="g-signin2" style="float:right;" data-onsuccess="onSignIn"></div></li>
+					<li><a href="#" onclick="signOut();">Sign out</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="container body-content">
+		@RenderBody()
+		<hr />
+		<footer>
+			<p>&copy; @DateTime.Now.Year - SeaySide Labs</p>
+		</footer>
+	</div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/bootstrap")
+	@RenderSection("scripts", required: false)
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+	<script type="text/javascript">
+		function onSignIn(googleUser) {
+			var profile = googleUser.getBasicProfile();
+			sessionStorage["googleInfo"] = profile;
+			console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+			console.log('Name: ' + profile.getName());
+			console.log('Image URL: ' + profile.getImageUrl());
+			console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+
+			// The ID token you need to pass to your backend:
+			var id_token = googleUser.getAuthResponse().id_token;
+			console.log("ID Token: " + id_token);
+		}
+
+		function signOut() {
+			var auth2 = gapi.auth2.getAuthInstance();
+			auth2.signOut().then(function () {
+				console.log('User signed out.');
+			});
+		}
+	</script>
 </body>
 </html>
