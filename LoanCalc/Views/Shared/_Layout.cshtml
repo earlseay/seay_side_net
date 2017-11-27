@@ -17,13 +17,15 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				@Html.ActionLink("Loan Calc", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+				@Html.ActionLink("SeaySide.net", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
 			</div>
 			<div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-					<li>@Html.ActionLink("Snowball", "Snowball", "Loans")</li>
-					<li><div class="g-signin2" style="float:right;" data-onsuccess="onSignIn"></div></li>
-					<li><a href="#" onclick="signOut();">Sign out</a></li>
+				<ul class="nav navbar-nav navbar-left">
+					<li>@Html.ActionLink("Loans", "Snowball", "Loans")</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><div class="g-signin2" data-onsuccess="onSignIn"></div></li>
+					@*<li><a href="#" onclick="signOut();">Sign out</a></li>*@
 				</ul>
 			</div>
 		</div>
