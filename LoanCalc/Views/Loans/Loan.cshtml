@@ -1,46 +1,80 @@
 ﻿@model LoanCalc.Models.Loan
 
 <style>
-	.card{
-		border: 1px solid gray;
-		padding: 20px 20px 20px 20px;
+	.giveMeSomeSpace {
 		margin: 10px 0px 10px 0px;
 	}
 
 	.card-body {
 		/* padding: 0px 5px 0px 5px; */
 	}
+
 		.card-body .row {
 			padding: 5px 0px 5px 0px;
 		}
-	.bold{
+
+	.bold {
 		font-weight: bold;
+	}
+
+	.rotate90 {
+		display: inline-block;
+		transform: rotate(270deg);
+	}
+
 	}
 </style>
 
-<div class="container card">
-	<div class="row">
-		<div class="col col-md-12">
-			<h3>@Model.Name</h3>
+<div class="container panel panel-default giveMeSomeSpace">
+	<div class="row panel-heading">
+		<div class="row">
+			<div class="col col-sm-12">
+				<a class="panel-title" data-toggle="collapse" href="#loanBody_@Model.Id" aria-expanded="false" aria-controls="loanBody_@Model.Id">
+					<h3 class="panel-title"><span class="glyphicon glyph"></span><span class="bold">@string.Format("{0:c}", Model.Current_AmountRemaining)</span> - @Model.Name</h3>
+				</a>
 		</div>
-		<hr />
-	</div>
-	<div class="row card-body">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-					Current Amount Remaining: <span class="bold">@string.Format("{0:c}", Model.Current_AmountRemaining)</span>
+		</div>
+		<div class="row">
+			<div class="col col-md-12">
+				<div class="progress progress-striped progress-bar-warning">
+					@{
+						var percentComplete = Math.Round((double)Model.MonthsPaid / (double)Model.MonthsToPayOff, 2, MidpointRounding.AwayFromZero) * 100;
+						if (Model.Current_AmountRemaining == 0)
+						{
+							percentComplete = 100;
+						}
+					}
+					<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@percentComplete" aria-valuemin="0" aria-valuemax="100" style="width: @(percentComplete)%;">
+						@(percentComplete)%
+					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+	<div id="loanBody_@Model.Id" class="row panel-body collapse panel-collapse">
+
+
+		<div class="container">
+
 			<div class="row">
 				<div class="col col-md-12">
 					Regular Monthly Payment: @string.Format("{0:c}", Model.MonthlyPayment)
 				</div>
-				<div class="col col-md-12">
-					Extra Monthly Payment: @string.Format("{0:c}", Model.ExtraPaymentAmount)
+				<div class="col col-lg-12">
+					<span>
+						Extra: @string.Format("{0:c}", Model.ExtraPaymentAmount)
+					</span>
+					<span class="glyphicon glyphicon-plus"></span>
+					<span>
+						Snowballed: @string.Format("{0:c}", Model.SnowballPaymentAmount)
+					</span>
+					<span class="glyphicon glyphicon-pause rotate90"></span>
+					<span>
+						@string.Format("{0:c}", Model.ExtraPaymentAmount + Model.SnowballPaymentAmount)
+					</span>
 				</div>
 				<div class="col col-md-12">
-					Total Monthly Payment: @string.Format("{0:c}", Model.MonthlyPayment + Model.ExtraPaymentAmount)
+					Total Monthly Payment: @string.Format("{0:c}", Model.MonthlyPayment + Model.ExtraPaymentAmount + Model.SnowballPaymentAmount)
 				</div>
 			</div>
 			<div class="row">
@@ -50,46 +84,58 @@
 			</div>
 			<div class="row">
 				<div class="col col-md-12">
-					Total Months to Payoff: @Model.MonthsToPayOff
+					Total Months to Payoff: <span class="badge danger">@Model.MonthsToPayOff</span>
 				</div>
-			@{
-			var yearsToPayoff = Model.MonthsToPayOff > 0 ? Model.MonthsToPayOff / 12 > 1 ? Model.MonthsToPayOff / 12 : 0 : 0;
-			if (yearsToPayoff > 0)
-			{
+				<div class="col col-md-12">
+					Total Months with Extra Payment : @Model.TotalMonthsSnowballed
+				</div>
+				@{
+					var yearsToPayoff = Model.MonthsToPayOff > 0 ? Model.MonthsToPayOff / 12 >= 1 ? Model.MonthsToPayOff / 12 : 0 : 0;
+					var leftoverMonths = Model.MonthsToPayOff % 12;
+					var leftOverMonthsString = leftoverMonths > 0 ? leftoverMonths.ToString() + " months" : "";
+					if (yearsToPayoff > 0)
+					{
 						<div class="col-md-12">
-							Years to Payoff: @yearsToPayoff
+							Time to Payoff: @yearsToPayoff years @leftOverMonthsString
 						</div>
 			}
-			}
+				}
 
 				<div class="col-md-12">
-					Payments made to date: @Model.MonthsPaid
+					Payments made to date: <span class="badge success">@Model.MonthsPaid</span>
 				</div>
 				<div class="col-md-12">
-					Payments left to make: @(Model.MonthsToPayOff - Model.MonthsPaid)
+					Payments left to make: <span class="badge text-info">@(Model.MonthsToPayOff - Model.MonthsPaid)</span>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col col-md-12">
-					<table class="table table-condensed table-bordered table-striped">
-						<thead>
-							<tr>
-								<td>Date</td>
-								<td>Loan Amount</td>
-								<td>Payment Amount</td>
-								<td>Principal</td>
-								<td>Interest</td>
-							</tr>
-						</thead>
-						<tbody>
-						@foreach (var payment in Model.Payments)
-						{
-							@Html.Partial("Payment", payment)
-						}
-						</tbody>
-					</table>
+			@if (Model.Payments.Count() > 0)
+			{
+				<div class="row">
+					<div class="col col-md-12" style="overflow-x:scroll;">
+					
+						<table class="table table-condensed table-bordered table-striped">
+							<thead>
+								<tr>
+									<td>Date</td>
+									<td>Loan Amount</td>
+									<td>Payment Amount</td>
+									<td>Principal</td>
+									<td>Interest</td>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach (var payment in Model.Payments)
+								{
+									@Html.Partial("Payment", payment)
+								}
+							</tbody>
+						</table>
+					
+					</div>
 				</div>
-			</div>
+			}
 		</div>
 	</div>
+
+
 </div>

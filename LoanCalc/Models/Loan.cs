@@ -10,6 +10,7 @@ namespace LoanCalc.Models
 	{
 		public Loan(string name, decimal originalAmountRemaining, decimal monthlyPayment, decimal interestRate, decimal extraPaymentAmount, DateTime monthlyPaymentDate, bool includeInSnowball = true)
 		{
+			Id = Guid.NewGuid();
 			Name = name;
 			Original_AmountRemaining = originalAmountRemaining;
 			MonthlyPayment = monthlyPayment;
@@ -21,6 +22,7 @@ namespace LoanCalc.Models
 			Payments = new List<Payment>();
 		}
 
+		public Guid Id { get; private set; }
 		public string Name { get; set; }
 		public bool IncludeInSnowball { get; set; }
 
@@ -29,12 +31,14 @@ namespace LoanCalc.Models
 		public decimal MonthlyPayment { get; set; }
 		public decimal InterestRate { get; set; }
 		public decimal ExtraPaymentAmount { get; set; }
+		public decimal SnowballPaymentAmount { get; set; }
 		public DateTime MonthlyPaymentDate { get; set; }
 		public decimal PayoffMonthlyPaymentExtra { get; set; }
 
 		public DateTime Original_ProjectedPayOffDate { get; set; }
 		public DateTime New_ProjectedPayoffDate { get; set; }
 		public int MonthsToPayOff { get; set; }
+		public int TotalMonthsSnowballed { get; set; }
 		public int MonthsPaid { get; set; }
 
 		public List<Payment> Payments { get; set; }

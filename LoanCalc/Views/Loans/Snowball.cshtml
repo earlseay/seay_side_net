@@ -9,6 +9,7 @@
 <div class="container">
 	<div class="row" style="margin-top:10px;">
 		<div class="col col-lg-6">
+			<h2>In Progress</h2>
 			Run Date: @Html.TextBoxFor(model => model.RunDate) <button type="submit" class="btn btn-primary">Calculate</button>
 		</div>
 	</div>
@@ -16,7 +17,8 @@
 	@{
 		var itemsPerRow = 2;
 		var count = 0;
-		foreach (var loan in Model.Loans.OrderBy(al => al.Current_AmountRemaining).ToList())
+		var items = Model.Loans.Where(al => al.Current_AmountRemaining > 0).OrderBy(al => al.Current_AmountRemaining).ToList();
+		foreach (var loan in items)
 		{
 			if (count == 0 || count % itemsPerRow == 0)
 			{
@@ -25,12 +27,39 @@
 			<div class="col-lg-6 col-md-1">
 				@Html.Partial("Loan", loan)
 			</div>
-			if (count == (itemsPerRow - 1) || (count - (itemsPerRow - 1)) % itemsPerRow == 0)
+			if (count == (itemsPerRow - 1) || (count - (itemsPerRow - 1)) % itemsPerRow == 0 || items.Count() == 1)
 			{
 				@:</div>
 			}
 			count++;
 		}
 	}
-</div>
-}
+	<hr />
+	</div>
+	
+	<div class="container">
+		<div class="row" style="margin-top:10px;">
+			<div class="col col-lg-6">
+				<h2>Done</h2>
+			</div>
+		</div>
+		@{
+			count = 0;
+			foreach (var loan in Model.Loans.Where(al => al.Current_AmountRemaining <= 0).OrderBy(al => al.Current_AmountRemaining).ToList())
+			{
+				if (count == 0 || count % itemsPerRow == 0)
+				{
+					@:<div class="row">
+			}
+				<div class="col-lg-6 col-md-1">
+					@Html.Partial("Loan", loan)
+				</div>
+				if (count == (itemsPerRow - 1) || (count - (itemsPerRow - 1)) % itemsPerRow == 0 || items.Count() == 1)
+				{
+					@:</div>
+			}
+				count++;
+			}
+		}
+	</div>
+			}

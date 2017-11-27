@@ -32,12 +32,16 @@ namespace LoanCalc.Controllers
 
 			ls.Loans = new List<Loan>
 			{
-				new Loan("EJ Nelnet", 565.12m, 66.64m, 6.050m, 85m, new DateTime(2017,11,18)),
-				new Loan("EJ Navient", 735.39m, 54.40m, 6.800m, 0m, new DateTime(2017,10,23)),
-				new Loan("B Navient 2", 829.46m, 51.79m, 6.800m, 0m, new DateTime(2017,11,15)),
+				new Loan("B Nelnet 1", 0m, 25m, 6.550m, 0m, new DateTime(2017,10,23)),
+				new Loan("B Navient 1", 0m, 25m, 6.800m, 0m, new DateTime(2017,11,7)),
+				new Loan("Kay CC", 0m, 35m, 23.990m, 0m, new DateTime(2017,11,16)),
+				new Loan("EJ Nelnet", 0m, 66.64m, 6.050m, 0m, new DateTime(2017,11,27)),
+				new Loan("EJ Navient", 0m, 54.40m, 6.800m, 0m, new DateTime(2017,11,23)),
+				new Loan("B Navient 2", 829.46m, 51.79m, 6.800m, 50m, new DateTime(2017,11,15)),
 				new Loan("B Nelnet 2", 1339.27m, 67.44m, 6.550m, 0m, new DateTime(2017,11,18)),
-				new Loan("VACU CC", 2960.54m, 102m, 10.990m, 0m, new DateTime(2017,11,18)),
+				new Loan("VACU CC", 2938.53m, 102m, 10.990m, 0m, new DateTime(2017,11,18)),
 				new Loan("JRAC HVAC", 6580m, 125m, 0m, 0m, new DateTime(2017,11,08)),
+				new Loan("EJ Discover", 9390.46m, 168m, 13.99m, 0m, new DateTime(2017,11,17)),
 				new Loan("Durango", 24702.61m, 543.95m, 3.700m, 0m, new DateTime(2017,10,31)),
 				new Loan("Discover DC", 29555.66m, 583.42m, 13.990m, 0m, new DateTime(2017,11,20)),
 				new Loan("Mortgage", 183880.32m, 876.26m, 3.750m, 0m, new DateTime(2017,11,01)),
@@ -48,7 +52,7 @@ namespace LoanCalc.Controllers
 			foreach (var loan in ls.Loans.OrderBy(al => al.Original_AmountRemaining).ToList())
 			{
 				if (previousLoan != null)
-					loan.ExtraPaymentAmount = previousLoan.MonthlyPayment + previousLoan.ExtraPaymentAmount;
+					loan.SnowballPaymentAmount = previousLoan.MonthlyPayment + previousLoan.ExtraPaymentAmount + previousLoan.SnowballPaymentAmount;
 				//compute next payment date
 				var date = loan.MonthlyPaymentDate;
 				decimal computedAmountRemaining = loan.Original_AmountRemaining;
@@ -71,14 +75,16 @@ namespace LoanCalc.Controllers
 					var payment = new Payment()
 					{
 						Date = date,
-						Amount = loan.MonthlyPayment,
+						Amount = loan.MonthlyPayment + loan.ExtraPaymentAmount,
 						Interest = computedAmountRemaining - currentAmountRemaining,
 						LoanAmount = computedAmountRemaining,
 					};
 
 					if (previousLoan == null || loan.MonthsToPayOff >= previousLoan.MonthsToPayOff)
-						payment.Amount += loan.ExtraPaymentAmount;
-
+					{
+						payment.Amount += loan.SnowballPaymentAmount;
+						loan.TotalMonthsSnowballed++;
+					}
 					if (previousLoan != null && loan.MonthsToPayOff == previousLoan.MonthsToPayOff)
 						payment.Amount += previousLoan.PayoffMonthlyPaymentExtra;
 
@@ -104,7 +110,7 @@ namespace LoanCalc.Controllers
 				loan.New_ProjectedPayoffDate = date;
 				previousLoan = loan;
 			}
-			ls.Loans.RemoveAll(l => l.Current_AmountRemaining <= 0);
+			//ls.Loans.RemoveAll(l => l.Current_AmountRemaining <= 0);
 			return ls;
 		}
 	}
