@@ -1,11 +1,11 @@
-﻿using LoanCalc.Models;
+﻿using SeaySideNet.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace LoanCalc.Controllers
+namespace SeaySideNet.Controllers
 {
 	public class LoansController : Controller
 	{
