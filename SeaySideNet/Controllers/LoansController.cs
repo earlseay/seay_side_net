@@ -41,7 +41,7 @@ namespace SeaySideNet.Controllers
 				new Loan("B Nelnet 2", 1339.27m, 67.44m, 6.550m, 0m, new DateTime(2017,11,18)),
 				new Loan("VACU CC", 2938.53m, 102m, 10.990m, 0m, new DateTime(2017,11,18)),
 				new Loan("JRAC HVAC", 6580m, 125m, 0m, 0m, new DateTime(2017,11,08)),
-				new Loan("EJ Discover", 9616.06m, 168m, 13.99m, 0m, new DateTime(2017,11,17)),
+				new Loan("EJ Discover", 9656.41m, 168m, 13.99m, 0m, new DateTime(2017,11,17)),
 				new Loan("Durango", 24702.61m, 543.95m, 3.700m, 0m, new DateTime(2017,10,31)),
 				new Loan("Discover DC", 29555.66m, 583.42m, 13.990m, 0m, new DateTime(2017,11,20)),
 				new Loan("Mortgage", 183880.32m, 876.26m, 3.750m, 0m, new DateTime(2017,11,01)),
