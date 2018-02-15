@@ -20,7 +20,9 @@
 				@Html.ActionLink("SeaySide.net", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
 			</div>
 			<div class="navbar-collapse collapse">
+				
 				<ul class="nav navbar-nav navbar-left">
+					<li>@Html.ActionLink("My Apps", "Index", "MyApps")</li>
 					<li>@Html.ActionLink("Loans", "Snowball", "Loans")</li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
@@ -56,6 +58,7 @@
 			// The ID token you need to pass to your backend:
 			var id_token = googleUser.getAuthResponse().id_token;
 			console.log("ID Token: " + id_token);
+			sessionStorage.setItem("LoggedIn", googleUser.getAuthResponse().id_token);
 		}
 
 		function signOut() {

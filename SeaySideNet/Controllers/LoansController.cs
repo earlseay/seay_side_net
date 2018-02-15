@@ -32,19 +32,20 @@ namespace SeaySideNet.Controllers
 
 			ls.Loans = new List<Loan>
 			{
-				new Loan("B Nelnet 1", 0m, 25m, 6.550m, 0m, new DateTime(2017,10,23)),
-				new Loan("B Navient 1", 0m, 25m, 6.800m, 0m, new DateTime(2017,11,7)),
-				new Loan("Kay CC", 0m, 35m, 23.990m, 0m, new DateTime(2017,11,16)),
-				new Loan("EJ Nelnet", 0m, 66.64m, 6.050m, 0m, new DateTime(2017,11,27)),
-				new Loan("EJ Navient", 0m, 54.40m, 6.800m, 0m, new DateTime(2017,11,23)),
-				new Loan("B Navient 2", 829.46m, 51.79m, 6.800m, 50m, new DateTime(2017,11,15)),
-				new Loan("B Nelnet 2", 1339.27m, 67.44m, 6.550m, 0m, new DateTime(2017,11,18)),
-				new Loan("VACU CC", 2938.53m, 102m, 10.990m, 0m, new DateTime(2017,11,18)),
-				new Loan("JRAC HVAC", 6580m, 125m, 0m, 0m, new DateTime(2017,11,08)),
-				new Loan("EJ Discover", 9656.41m, 168m, 13.99m, 0m, new DateTime(2017,11,17)),
-				new Loan("Durango", 24702.61m, 543.95m, 3.700m, 0m, new DateTime(2017,10,31)),
-				new Loan("Discover DC", 29555.66m, 583.42m, 13.990m, 0m, new DateTime(2017,11,20)),
-				new Loan("Mortgage", 183880.32m, 876.26m, 3.750m, 0m, new DateTime(2017,11,01)),
+				new Loan("B Nelnet 1", 0m, 0m, 6.550m, 0m, new DateTime(2017,10,23)),
+				new Loan("B Navient 1", 0m, 0m, 6.800m, 0m, new DateTime(2017,11,7)),
+				new Loan("Kay CC", 0m, 0m, 0m, 0m, new DateTime(2017,11,16)),
+				new Loan("EJ Nelnet", 0m, 0m, 6.050m, 0m, new DateTime(2017,11,27)),
+				new Loan("EJ Navient", 0m, 0m, 6.800m, 0m, new DateTime(2017,11,23)),
+				new Loan("B Navient 2", 0m, 52m, 6.800m, 0m, new DateTime(2018,2,07)),
+				new Loan("Goodyear", 152m, 100m, 0m, 0m, new DateTime(2018,2,4)),
+				new Loan("B Nelnet 2", 1218.70m, 67.44m, 6.550m, 0m, new DateTime(2018,01,18)),
+				new Loan("VACU CC", 2964.54m, 102m, 10.990m, 0m, new DateTime(2018,1,15)),
+				new Loan("JRAC HVAC", 6205m, 125m, 0m, 0m, new DateTime(2018,2,05)),
+				new Loan("EJ Discover", 11559.68m, 236m, 13.99m, 0m, new DateTime(2018,2,12)),
+				new Loan("Durango", 23296.94m, 543.95m, 3.700m, 0m, new DateTime(2018,1,31)),
+				new Loan("Discover DC", 29076.95m, 583.42m, 13.990m, 0m, new DateTime(2018,1,18)),
+				new Loan("Mortgage", 182972.59m, 876.26m, 3.750m, 0m, new DateTime(2018,2,01)),
 			};
 
 			Loan previousLoan = null;

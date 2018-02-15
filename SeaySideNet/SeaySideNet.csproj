@@ -189,10 +189,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoansController.cs" />
+    <Compile Include="Controllers\MyAppsController.cs" />
     <Compile Include="Controllers\PaymentsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\App.cs" />
+    <Compile Include="Models\AppSet.cs" />
     <Compile Include="Models\Loan.cs" />
     <Compile Include="Models\LoanSet.cs" />
     <Compile Include="Models\Payment.cs" />
@@ -203,6 +206,8 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\beach-wave-pictures-1.jpg" />
+    <Content Include="Content\Supernice.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -252,6 +257,8 @@
     <Content Include="Views\Loans\Snowball.cshtml" />
     <Content Include="Views\Shared\Payment.cshtml" />
     <Content Include="Views\Loans\Loan.cshtml" />
+    <Content Include="Views\MyApps\App.cshtml" />
+    <Content Include="Views\MyApps\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
