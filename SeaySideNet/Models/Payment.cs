@@ -7,6 +7,7 @@ namespace SeaySideNet.Models
 {
 	public class Payment
 	{
+		public bool OneTimePayment { get; set; }
 		public decimal Amount { get; set; }
 		public decimal Interest { get; set; }
 		public decimal LoanAmount { get; set; }

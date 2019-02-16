@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  seayside:
+    image: seayside
+    build:
+      context: ./SeaySide
+      dockerfile: Dockerfile

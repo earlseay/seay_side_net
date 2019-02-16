@@ -16,13 +16,6 @@
     white-space: normal;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
-}
-
 
 .home {
 	background-image: url("Images/beach-wave-pictures-1.jpg");
@@ -38,4 +31,29 @@ textarea {
 
 .home-subtext {
 	color: #fff;
+}
+
+.table-overflow{
+	overflow-x: auto;
+}
+
+.giveMeSomeSpace {
+	margin: 10px 0px 10px 0px;
+}
+
+.card-body .row {
+	padding: 5px 0px 5px 0px;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.rotate90 {
+	display: inline-block;
+	transform: rotate(270deg);
+}
+
+.mt-10 {
+	margin-top: 10px;
 }

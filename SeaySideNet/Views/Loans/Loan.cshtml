@@ -1,29 +1,15 @@
 ﻿@model SeaySideNet.Models.Loan
 
-<style>
-	.giveMeSomeSpace {
-		margin: 10px 0px 10px 0px;
-	}
-
-	.card-body {
-		/* padding: 0px 5px 0px 5px; */
-	}
-
-		.card-body .row {
-			padding: 5px 0px 5px 0px;
-		}
-
-	.bold {
-		font-weight: bold;
-	}
-
-	.rotate90 {
-		display: inline-block;
-		transform: rotate(270deg);
-	}
-
-	}
-</style>
+<script>
+	$(function () {
+		$("#loanBody_@Model.Id").on('hide.bs.collapse', function () {
+			$("#loanBody_@Model.Id").parent().find('.glyphicon-chevron-down').addClass('glyphicon-chevron-right').removeClass('glyphicon-chevron-down')
+		});
+		$("#loanBody_@Model.Id").on('show.bs.collapse', function () {
+			$("#loanBody_@Model.Id").parent().find('.glyphicon-chevron-right').addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-right')
+		});
+	});
+</script>
 
 <div class="panel panel-default giveMeSomeSpace">
 	<div class="panel-heading">
@@ -34,7 +20,7 @@
 					<div class="row panel-title">
 
 						<div class="col col-md-9">
-							<h3 class="panel-title"><span class="glyphicon glyph"></span><span class="bold">@string.Format("{0:c}", Model.Current_AmountRemaining)</span> - @Model.Name</h3>
+							<h3 class="panel-title"><span class="glyphicon glyphicon-chevron-right"></span><span class="bold">@string.Format("{0:c}", Model.Current_AmountRemaining)</span> - @Model.Name</h3>
 						</div>
 						<div class="col col-md-3">
 							<span class="bold">@Model.New_ProjectedPayoffDate.ToShortDateString()</span>
@@ -45,10 +31,14 @@
 		</div>
 		<div class="progress progress-striped progress-bar-warning">
 			@{
-				var percentComplete = Math.Round((double)Model.MonthsPaid / (double)Model.MonthsToPayOff, 2, MidpointRounding.AwayFromZero) * 100;
-				if (Model.Current_AmountRemaining == 0)
+				double percentComplete = 100;
+				if (Model.Current_AmountRemaining > 0)
 				{
-					percentComplete = 100;
+					percentComplete = (1 - Math.Round((double)Model.Current_AmountRemaining / (double)Model.Original_AmountRemaining, 2, MidpointRounding.AwayFromZero)) * 100;
+				}
+				if(percentComplete < 0)
+				{
+					percentComplete = 0;
 				}
 			}
 			<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@percentComplete" aria-valuemin="0" aria-valuemax="100" style="width: @(percentComplete)%;">
@@ -116,7 +106,7 @@
 			@if (Model.Payments.Count() > 0)
 			{
 				<div class="row">
-					<div class="col col-md-12" style="overflow-x:scroll;">
+					<div class="col col-md-12 table-overflow">
 
 						<table class="table table-condensed table-bordered table-striped">
 							<thead>

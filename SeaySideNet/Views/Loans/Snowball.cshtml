@@ -4,62 +4,76 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm("Submit", "Loans", FormMethod.Post))
+@using (Html.BeginForm("Snowball", "Loans", FormMethod.Post))
 {
-<div class="">
-	<div class="row" style="margin-top:10px;">
-		<div class="col col-lg-6">
-			<h2>In Progress</h2>
-			Run Date: @Html.TextBoxFor(model => model.RunDate) <button type="submit" class="btn btn-primary">Calculate</button>
+	<div>
+		<div class="row mt-10">
+			<div class="col col-sm-6">
+				<h2>In Progress</h2>
+				<div class="input-group">
+					<span class="input-group-addon">Run Date</span>
+					@Html.TextBoxFor(model => model.RunDate, new { @class = "form-control" })
+					<span class="input-group-btn text-left">
+						<button type="submit" class="btn btn-primary">
+							Calculate
+						</button>
+					</span>
+				</div>
+			</div>
+			<div class="col col-sm-6 text-right">
+				<h4>Total Outstanding: <span class="@(Model.TotalOutstanding > 0 ? "text-danger" : "text-success")">@string.Format("{0:c}", Model.Loans.Sum(al => al.Current_AmountRemaining))</span></h4>
+				<h4>Total Paid: <span class="@(Model.TotalPaid < 0 ? "text-danger" : "text-success")">@string.Format("{0:c}", Model.Loans.Sum(al => al.Original_AmountRemaining - al.Current_AmountRemaining))</span></h4>
+				<h4>Total Monthly Payment: <span class="text-warning">@string.Format("{0:c}", Model.Loans.Sum(al => al.MonthlyPayment + al.ExtraPaymentAmount))</span></h4>
+			</div>
 		</div>
+
+		@{
+			var itemsPerRow = 2;
+			var count = 0;
+			var items = Model.Loans.Where(al => al.Current_AmountRemaining > 0).OrderBy(al => al.Current_AmountRemaining).ToList();
+			foreach (var loan in items)
+			{
+				if (count == 0 || count % itemsPerRow == 0)
+				{
+					@:<div class="row">
+				}
+				<div class="col-sm-6">
+					@Html.Partial("Loan", loan)
+				</div>
+				if (count == items.Count() - 1 || count % itemsPerRow != 0)
+				{
+					@:</div>
+				}
+				count++;
+			}
+		}
+		<hr />
 	</div>
 
-	@{
-		var itemsPerRow = 2;
-		var count = 0;
-		var items = Model.Loans.Where(al => al.Current_AmountRemaining > 0).OrderBy(al => al.Current_AmountRemaining).ToList();
-		foreach (var loan in items)
-		{
-			if (count == 0 || count % itemsPerRow == 0)
-			{
-				@:<div class="row">
-			}
-			<div class="col-lg-6 col-md-1">
-				@Html.Partial("Loan", loan)
-			</div>
-			if (count == (itemsPerRow - 1) || (count - (itemsPerRow - 1)) % itemsPerRow == 0 || items.Count() == 1)
-			{
-				@:</div>
-			}
-			count++;
-		}
-	}
-	<hr />
-	</div>
-	
-	<div class="">
-		<div class="row" style="margin-top:10px;">
+	<div>
+		<div class="row mt-10">
 			<div class="col col-lg-6">
 				<h2>Done</h2>
 			</div>
 		</div>
 		@{
 			count = 0;
-			foreach (var loan in Model.Loans.Where(al => al.Current_AmountRemaining <= 0).OrderBy(al => al.Current_AmountRemaining).ToList())
+			items = Model.Loans.Where(al => al.Current_AmountRemaining <= 0).OrderBy(al => al.Current_AmountRemaining).ToList();
+			foreach (var loan in items)
 			{
 				if (count == 0 || count % itemsPerRow == 0)
 				{
 					@:<div class="row">
-			}
-				<div class="col-lg-6 col-md-1">
-					@Html.Partial("Loan", loan)
-				</div>
-				if (count == (itemsPerRow - 1) || (count - (itemsPerRow - 1)) % itemsPerRow == 0 || items.Count() == 1)
-				{
+					}
+					<div class="col-sm-6">
+						@Html.Partial("Loan", loan)
+					</div>
+					if (count == items.Count() - 1 || count % itemsPerRow != 0)
+					{
 					@:</div>
-			}
+				}
 				count++;
 			}
 		}
 	</div>
-			}
+}

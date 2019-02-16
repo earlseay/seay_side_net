@@ -1,0 +1,14 @@
+﻿@model SeaySideNet.Models.AppSet
+@{
+    ViewBag.Title = "MyApps";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>MyApps</h2>
+
+<ul class="nav nav-pills nav-stacked">
+	@foreach (var app in Model.Apps)
+	{
+		@Html.Partial("App", app)
+	}
+</ul>

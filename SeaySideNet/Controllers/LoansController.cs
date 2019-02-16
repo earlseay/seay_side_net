@@ -17,7 +17,7 @@ namespace SeaySideNet.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult Submit(LoanSet model)
+		public ActionResult Snowball(LoanSet model)
 		{
 			var ls = SnowballAlg(model.RunDate);
 			return View("Snowball", ls);
@@ -32,20 +32,37 @@ namespace SeaySideNet.Controllers
 
 			ls.Loans = new List<Loan>
 			{
-				new Loan("B Nelnet 1", 0m, 0m, 6.550m, 0m, new DateTime(2017,10,23)),
-				new Loan("B Navient 1", 0m, 0m, 6.800m, 0m, new DateTime(2017,11,7)),
-				new Loan("Kay CC", 0m, 0m, 0m, 0m, new DateTime(2017,11,16)),
-				new Loan("EJ Nelnet", 0m, 0m, 6.050m, 0m, new DateTime(2017,11,27)),
-				new Loan("EJ Navient", 0m, 0m, 6.800m, 0m, new DateTime(2017,11,23)),
-				new Loan("B Navient 2", 0m, 52m, 6.800m, 0m, new DateTime(2018,2,07)),
-				new Loan("Goodyear", 152m, 100m, 0m, 0m, new DateTime(2018,2,4)),
-				new Loan("B Nelnet 2", 1218.70m, 67.44m, 6.550m, 0m, new DateTime(2018,01,18)),
-				new Loan("VACU CC", 2964.54m, 102m, 10.990m, 0m, new DateTime(2018,1,15)),
-				new Loan("JRAC HVAC", 6205m, 125m, 0m, 0m, new DateTime(2018,2,05)),
-				new Loan("EJ Discover", 11559.68m, 236m, 13.99m, 0m, new DateTime(2018,2,12)),
-				new Loan("Durango", 23296.94m, 543.95m, 3.700m, 0m, new DateTime(2018,1,31)),
-				new Loan("Discover DC", 29076.95m, 583.42m, 13.990m, 0m, new DateTime(2018,1,18)),
-				new Loan("Mortgage", 182972.59m, 876.26m, 3.750m, 0m, new DateTime(2018,2,01)),
+				//new Loan("B Nelnet 1", 0m, 0m, 6.550m, 0m, new DateTime(2017,10,23)),
+				//new Loan("B Navient 1", 0m, 0m, 6.800m, 0m, new DateTime(2017,11,7)),
+				//new Loan("Kay CC", 0m, 0m, 0m, 0m, new DateTime(2017,11,16)),
+				//new Loan("EJ Nelnet", 0m, 0m, 6.050m, 0m, new DateTime(2017,11,27)),
+				//new Loan("EJ Navient", 0m, 0m, 6.800m, 0m, new DateTime(2017,11,23)),
+				//new Loan("B Navient 2", 0m, 52m, 6.800m, 0m, new DateTime(2018,2,07)),
+				//new Loan("Goodyear", 152m, 100m, 0m, 0m, new DateTime(2018,02,04)),
+				//new Loan("B Nelnet 2", 0m, 68m, 6.550m, 80m, new DateTime(2018,05,15)),
+				new Loan("VACU CC", 818.82m, 102m, 10.990m, 191m, new DateTime(2019,1,15))
+				{ OneTimePayments = new List<Payment>{  new Payment()
+					{
+						Date = new DateTime(2019, 02, 08),
+						Amount = 293m,
+					} } },
+				new Loan("Home Depot", 3824.51m, 46m, 0m, 54m, new DateTime(2019,1,25)),
+				//{ OneTimePayments = new List<Payment>{  new Payment()
+				//	{
+				//		Date = new DateTime(2019, 04, 25),
+				//		Amount = 3000m,
+				//	} } },
+				new Loan("JRAC HVAC", 4750m, 125m, 0m, 0m, new DateTime(2019,1,05), false),
+				new Loan("B Discover", 15000.00m, 350m, 15.24m, 0m, new DateTime(2019,1,28)),
+				new Loan("EJ Discover", 24922.62m, 509m, 15.24m, 0m, new DateTime(2019,1,28)),
+				//{ OneTimePayments = new List<Payment>{  new Payment()
+				//	{
+				//		Date = new DateTime(2019, 04, 25),
+				//		Amount = 3000m,
+				//	} } },
+				new Loan("Durango", 17534.03m, 543.95m, 3.700m, 0m, new DateTime(2019,1,28)),
+				new Loan("Discover Loan", 25945.91m, 583.42m, 13.990m, 0m, new DateTime(2019,1,18)),
+				new Loan("Mortgage", 179570.60m, 876.26m, 3.750m, 0m, new DateTime(2019,1,01)),
 			};
 
 			Loan previousLoan = null;
@@ -69,6 +86,22 @@ namespace SeaySideNet.Controllers
 					for (int j = 0; j < interestDays; j++)
 					{
 						date = date.AddDays(1);
+						//handling one time payments
+						foreach (var otp in loan.OneTimePayments.Where(p => p.Date.Date == date.Date))
+						{
+							if (date.Date >= ls.RunDate.Date)
+							{
+								loan.Payments.Add(new Payment()
+								{
+									Date = date,
+									Amount = otp.Amount,
+									Interest = computedAmountRemaining - currentAmountRemaining,
+									LoanAmount = computedAmountRemaining - otp.Amount,
+								});
+							}
+							computedAmountRemaining -= otp.Amount;
+							currentAmountRemaining = computedAmountRemaining;
+						}
 						computedAmountRemaining += computedAmountRemaining * (((loan.InterestRate / 12) / interestDays) / 100);
 						if (date.Date <= ls.RunDate.Date)
 							loan.Current_AmountRemaining = computedAmountRemaining;
@@ -86,7 +119,7 @@ namespace SeaySideNet.Controllers
 						payment.Amount += loan.SnowballPaymentAmount;
 						loan.TotalMonthsSnowballed++;
 					}
-					if (previousLoan != null && loan.MonthsToPayOff == previousLoan.MonthsToPayOff)
+					if (previousLoan != null && loan.MonthsToPayOff == previousLoan.MonthsToPayOff-1)
 						payment.Amount += previousLoan.PayoffMonthlyPaymentExtra;
 
 					//when the amount left is smaller than the total payment we were going to make, reset
@@ -111,6 +144,8 @@ namespace SeaySideNet.Controllers
 				loan.New_ProjectedPayoffDate = date;
 				previousLoan = loan;
 			}
+			ls.TotalOutstanding = ls.Loans.Sum(al => al.Current_AmountRemaining);
+			ls.TotalPaid = ls.Loans.Sum(al => al.Original_AmountRemaining - al.Current_AmountRemaining);
 			//ls.Loans.RemoveAll(l => l.Current_AmountRemaining <= 0);
 			return ls;
 		}

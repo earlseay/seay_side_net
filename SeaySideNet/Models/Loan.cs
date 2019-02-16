@@ -20,6 +20,7 @@ namespace SeaySideNet.Models
 			IncludeInSnowball = includeInSnowball;
 
 			Payments = new List<Payment>();
+			OneTimePayments = new List<Payment>();
 		}
 
 		public Guid Id { get; private set; }
@@ -42,6 +43,8 @@ namespace SeaySideNet.Models
 		public int MonthsPaid { get; set; }
 
 		public List<Payment> Payments { get; set; }
+
+		public List<Payment> OneTimePayments { get; set; }
 
 		public override string ToString()
 		{
