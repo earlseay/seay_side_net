@@ -34,7 +34,7 @@
 				double percentComplete = 100;
 				if (Model.Current_AmountRemaining > 0)
 				{
-					percentComplete = (1 - Math.Round((double)Model.Current_AmountRemaining / (double)Model.Original_AmountRemaining, 2, MidpointRounding.AwayFromZero)) * 100;
+					percentComplete = Math.Round((double)1 - ((double)Model.Current_AmountRemaining / (double)Model.Original_AmountRemaining), 2, MidpointRounding.AwayFromZero) * 100;
 				}
 				if(percentComplete < 0)
 				{
