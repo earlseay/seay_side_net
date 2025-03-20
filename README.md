@@ -1,6 +1,6 @@
 # SeaySide.net
 
-```mermaid
+```plantuml
 graph TD;
     A-->B;
     A-->C;
