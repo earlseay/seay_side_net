@@ -1,6 +1,6 @@
 # SeaySide.net
 
-```plantuml
+```mermaid
 graph TD
 A - D
 B -> C
