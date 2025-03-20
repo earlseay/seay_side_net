@@ -1,8 +1,8 @@
 # SeaySide.net
 
 ```mermaid
-graph TD
-A - D
-B -> C
-C -> D
+graph TD;
+A - D;
+B -> C;
+C -> D;
 ```
